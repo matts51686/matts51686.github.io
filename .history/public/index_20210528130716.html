@@ -67,44 +67,38 @@
         }
       }
     </style>
-    <script
-      type="text/javascript"
-      src="https://prod-useast-b.online.tableau.com/javascripts/api/tableau-2.min.js"
-    ></script>
+    <script type="text/javascript" src="https://prod-useast-b.online.tableau.com/javascripts/api/tableau-2.min.js"></script>
     <script type="text/javascript">
-      var vizList = [
-        "https://prod-useast-b.online.tableau.com/t/sinisimattoct2020/views/BensReadingStats_16222207868440/BenjaminsSY2020-2021Reading",
-        "https://prod-useast-b.online.tableau.com/t/sinisimattoct2020/views/BensReadingStats_16222207868440/SeriesDetails",
-      ];
+        var vizList = ["https://prod-useast-b.online.tableau.com/t/sinisimattoct2020/views/BensReadingStats_16222207868440/BenjaminsSY2020-2021Reading",
+            "https://prod-useast-b.online.tableau.com/t/sinisimattoct2020/views/BensReadingStats_16222207868440/SeriesDetails"];
+        
+        var viz,
+            vizLen = vizList.length,
+            vizCount = 0;
+        
+        function createViz(vizPlusMinus) {
+            var vizDiv = document.getElementById("vizContainer"),
+                options = {
+                    hideTabs: true,
+                    hideToolbar: true
+                };
 
-      var viz,
-        vizLen = vizList.length,
-        vizCount = 0;
+            vizCount = vizCount + vizPlusMinus;
+            
+            if (vizCount >= vizLen) { 
+            // Keep the vizCount in the bounds of the array index.
+                vizCount = 0;
+            } else if (vizCount < 0) {
+                vizCount = vizLen - 1;
+            }
+            
+            if (viz) { // If a viz object exists, delete it.
+                viz.dispose();
+            }
 
-      function createViz(vizPlusMinus) {
-        var vizDiv = document.getElementById("vizContainer"),
-          options = {
-            hideTabs: true,
-            hideToolbar: true,
-          };
-
-        vizCount = vizCount + vizPlusMinus;
-
-        if (vizCount >= vizLen) {
-          // Keep the vizCount in the bounds of the array index.
-          vizCount = 0;
-        } else if (vizCount < 0) {
-          vizCount = vizLen - 1;
+            var vizURL = vizList[vizCount];
+            viz = new tableau.Viz(vizDiv, vizURL, options); 
         }
-
-        if (viz) {
-          // If a viz object exists, delete it.
-          viz.dispose();
-        }
-
-        var vizURL = vizList[vizCount];
-        viz = new tableau.Viz(vizDiv, vizURL, options);
-      }
     </script>
   </head>
   <body>
@@ -119,9 +113,8 @@
     </div>
 
     <div style="padding-left: 16px">
-      <h2>A Vizualization of all the Books You've Read This Year</h2>
-      <p>Interact with it! Click on some different titles to see what happens!</p>
-      <p2>Click on next to see details of each series!</p2>
+      <h2>Responsive Topnav Example</h2>
+      <p>Resize the browser window to see how it works.</p>
     </div>
 
     <script>
@@ -136,14 +129,11 @@
     </script>
   </body>
   <body onload="createViz(0);">
-    <div id="vizContainer" style="height: 850px"></div>
-    <div id="controls" style="padding: 20px">
-      <button style="width: 100px" onclick="javascript:createViz(-1);">
-        Previous
-      </button>
-      <button style="width: 100px" onclick="javascript:createViz(1);">
-        Next
-      </button>
+    <div id="vizContainer" style="width:1000px; height:850px;"></div>
+    <div id="controls" style="padding:20px;">
+        <button style="width:100px;" onclick="javascript:createViz(-1);">Previous</button>
+        <button style="width:100px;" onclick="javascript:createViz(1);">Next</button>
     </div>
-  </body>
+</body>
+
 </html>
